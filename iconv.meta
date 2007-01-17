@@ -1,0 +1,9 @@
+;;; iconv.meta -*- Hen -*-
+
+((egg "iconv.egg")
+ (doc-from-wiki)
+ (synopsis "Character-set conversions")
+ (category parsing)
+ (license "Public Domain")
+ (author "Alejandro Forero Cuervo")
+ (files "iconv.setup" "iconv.scm"))

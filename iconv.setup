@@ -1,0 +1,12 @@
+(define libiconv
+  (if (or (eq? 'macosx (software-version))
+          (eq? 'unknown (software-version)))
+    "-liconv"
+    ""))
+
+(compile -s -O2 -d1 iconv.scm ,libiconv)
+(install-extension 
+ 'iconv
+ "iconv.so"
+ '((version 1.4)
+   (documentation "iconv.html")))
