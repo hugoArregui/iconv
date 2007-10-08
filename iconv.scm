@@ -9,22 +9,26 @@
 ;;
 ;; Documentation is available in HTML format.
 ;;
-;; Version: 1.2
+;; Version: 1.5
 ;;
 ;; Newer versions might be available at:
 ;;
 ;;    http://anonymous:@afc.no-ip.info:8000/svn/home/src/chicken-eggs/iconv
 
-(declare (export iconv-open iconv))
+(declare
+  (no-procedure-checks-for-usual-bindings)
+  (unused
+    ;stop the warning
+    iconv_build_result)
+  (export
+    iconv-open iconv))
 
 (declare (foreign-declare "#include <iconv.h>\n#include <errno.h>\n"))
 
 (define iconv-open-inner
   (foreign-lambda* c-pointer ((c-string tocode) (c-string fromcode))
     "iconv_t result = iconv_open(tocode, fromcode);"
-    "if (result == (iconv_t) -1)"
-    "  result = NULL;"
-    "return(result);"))
+    "return(result == (iconv_t) -1 ? NULL : result);"))
 
 (define (iconv-open tocode fromcode)
   (and-let* ((value (iconv-open-inner tocode fromcode)))
@@ -41,7 +45,7 @@
   (make-string len) )
 
 (define iconv-real
-  (foreign-callback-lambda* scheme-object ((c-pointer cd) (scheme-object srco) (scheme-object invalido) (int bufsize)) #<<EOF
+  (foreign-safe-lambda* scheme-object ((c-pointer cd) (scheme-object srco) (scheme-object invalido) (int bufsize)) #<<EOF
   C_word result;
   size_t srclen = C_header_size(srco), left;
   char *src = C_c_string(srco), *buffer = NULL, *dst = buffer, *tmp;
@@ -64,7 +68,7 @@
         }
 
       left = buffer + bufsize - dst;
-      if (iconv(cd, &src, &srclen, &dst, &left) == -1)
+      if (iconv((iconv_t) cd, (const char* *) &src, &srclen, &dst, &left) == -1)
         switch (errno)
           {
           case E2BIG:
