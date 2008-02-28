@@ -1,0 +1,18 @@
+Source: chicken-iconv
+Section: libs
+Priority: optional
+Maintainer: Ivan Raikov <raikov@oist.jp>
+Build-Depends: debhelper (>> 3.0.0), chicken-bin (>= 3.0.0), libchicken-dev (>= 3.0.0)
+Standards-Version: 3.6.2
+
+Package: chicken-iconv
+Section: libs
+Architecture: any
+Depends: ${shlibs:Depends}, chicken-bin (>= 3.0.0)
+Description: Character set conversions in Scheme.
+ This Chicken Scheme extension allows conversion of multi-byte
+ sequences from one character set (encoding) to another by means of
+ the iconv functionality present in glibc (and thus is probably not
+ very portable).
+ .
+ Homepage: http://www.call-with-current-continuation.org/eggs/iconv.html
