@@ -1,12 +1,23 @@
+;; -*- scheme -*-
+
 (define libiconv
   (if (or (eq? 'macosx (software-version))
           (eq? 'unknown (software-version)))
     "-liconv"
     ""))
 
-(compile -s -O2 -d1 iconv.scm ,libiconv)
-(install-extension 
- 'iconv
- "iconv.so"
- '((version 1.5)
-   (documentation "iconv.html")))
+(define has-exports? (string>=? (chicken-version) "2.310"))
+
+(define (dynld-name fn) 
+  (make-pathname #f fn ##sys#load-dynamic-extension))   
+
+(compile  -O2 -d0 -s 
+         ,@(if has-exports? '(-check-imports -emit-exports iconv.exports) '())
+         iconv.scm)
+
+(install-extension 'iconv
+		   `(,(dynld-name "iconv")
+                     ,@(if has-exports? '("iconv.exports") (list)))
+		   `((version ,(if (file-exists? "version") (with-input-from-file "version" read) "unknown"))
+                     ,@(if has-exports? `((exports "iconv.exports")) (list))
+		     (documentation "iconv.html")))
