@@ -9,19 +9,19 @@
 ;;
 ;; Documentation is available in HTML format.
 ;;
-;; Version: 1.5
+;; Version: 1.6
 ;;
 ;; Newer versions might be available at:
 ;;
 ;;    http://anonymous:@afc.no-ip.info:8000/svn/home/src/chicken-eggs/iconv
 
-(declare
-  (no-procedure-checks-for-usual-bindings)
-  (unused
-    ;stop the warning
-    iconv_build_result)
-  (export
-    iconv-open iconv))
+(define-external (iconv_build_result (int len)) scheme-object
+  (make-string len))
+
+(module iconv
+  (iconv-open iconv)
+
+(import scheme chicken extras foreigners)
 
 (declare (foreign-declare "#include <iconv.h>\n#include <errno.h>\n"))
 
@@ -40,9 +40,6 @@
     ((cd src) (iconv cd src "?"))
     ((cd src invalid) (iconv cd src invalid (* (string-length src) 2)))
     ((cd src invalid dstlen) (iconv-real cd src invalid dstlen))))
-
-(define-external (iconv_build_result (int len)) scheme-object
-  (make-string len) )
 
 (define iconv-real
   (foreign-safe-lambda* scheme-object ((c-pointer cd) (scheme-object srco) (scheme-object invalido) (int bufsize)) #<<EOF
@@ -99,3 +96,5 @@
   return(result);
 EOF
 ))
+
+)

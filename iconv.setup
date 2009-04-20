@@ -3,21 +3,14 @@
 (define libiconv
   (if (or (eq? 'macosx (software-version))
           (eq? 'unknown (software-version)))
-    "-liconv"
-    ""))
+      '(-liconv)
+      '()))
 
-(define has-exports? (string>=? (chicken-version) "2.310"))
+(compile -s -O2 -d0 -j iconv iconv.scm ,@libiconv)
+(compile -s -O2 -d0 iconv.import.scm)
 
-(define (dynld-name fn) 
-  (make-pathname #f fn ##sys#load-dynamic-extension))   
-
-(compile  -O2 -d0 -s 
-         ,@(if has-exports? '(-check-imports -emit-exports iconv.exports) '())
-         iconv.scm)
-
-(install-extension 'iconv
-		   `(,(dynld-name "iconv")
-                     ,@(if has-exports? '("iconv.exports") (list)))
-		   `((version ,(if (file-exists? "version") (with-input-from-file "version" read) "unknown"))
-                     ,@(if has-exports? `((exports "iconv.exports")) (list))
-		     (documentation "iconv.html")))
+(install-extension
+ 'iconv
+ '("iconv.so" "iconv.import.so" "iconv.html")
+ '((version 1.6)
+   (documentation "iconv.html")))
