@@ -11,6 +11,6 @@
 
 (install-extension
  'iconv
- '("iconv.so" "iconv.import.so" "iconv.html")
+ '("iconv.so" "iconv.import.so")
  '((version 1.6)
    (documentation "iconv.html")))
