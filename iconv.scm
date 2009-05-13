@@ -42,7 +42,10 @@
     ((cd src invalid dstlen) (iconv-real cd src invalid dstlen))))
 
 (define iconv-real
-  (foreign-safe-lambda* scheme-object ((c-pointer cd) (scheme-object srco) (scheme-object invalido) (int bufsize)) #<<EOF
+  (foreign-safe-lambda* scheme-object ((nonnull-c-pointer cd)
+                                       (scheme-object srco)
+                                       (scheme-object invalido)
+                                       (int bufsize)) #<<EOF
   C_word result;
   size_t srclen = C_header_size(srco), left;
   char *src = C_c_string(srco), *buffer = NULL, *dst = buffer, *tmp;
