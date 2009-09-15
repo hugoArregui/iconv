@@ -21,7 +21,7 @@
 (module iconv
   (iconv-open iconv)
 
-(import scheme chicken extras foreigners)
+(import scheme chicken extras foreign)
 
 (declare (foreign-declare "#include <iconv.h>\n#include <errno.h>\n"))
 
