@@ -7,4 +7,4 @@
  (doc-from-wiki)
  (license "Public Domain")
  (author "Alejandro Forero Cuervo")
- (files "iconv.setup" "iconv.scm"))
+ (files "iconv.setup" "debian/control" "debian/rules" "debian/copyright" "debian/changelog" "iconv.meta" "iconv.scm"))
