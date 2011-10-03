@@ -2,22 +2,11 @@
 
 (define libiconv
   (if (or (eq? 'macosx (software-version))
-          (eq? 'openbsd (software-version))
           (eq? 'unknown (software-version)))
       '(-liconv)
       '()))
 
-(define linker-flags
-  (if (eq? 'openbsd (software-version))
-      '(-L/usr/local/lib)
-      '()))
-
-(define compiler-flags
-  (if (eq? 'openbsd (software-version))
-      '(-I/usr/local/include)
-      '()))
-
-(compile -s -O2 -d0 -j iconv iconv.scm ,@compiler-flags ,@linker-flags ,@libiconv)
+(compile -s -O2 -d0 -j iconv iconv.scm ,@libiconv)
 (compile -s -O2 -d0 iconv.import.scm)
 
 (install-extension
