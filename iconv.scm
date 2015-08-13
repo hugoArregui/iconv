@@ -68,7 +68,7 @@
         }
 
       left = buffer + bufsize - dst;
-      if (iconv((iconv_t) cd, (const char* *) &src, &srclen, &dst, &left) == -1)
+      if (iconv((iconv_t) cd, (char** __restrict) &src, &srclen, &dst, &left) == -1)
         switch (errno)
           {
           case E2BIG:
