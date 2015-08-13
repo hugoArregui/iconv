@@ -81,6 +81,7 @@
               }
             break;
           default:
+            free(buffer);
             return(C_SCHEME_FALSE);
           }
     }
