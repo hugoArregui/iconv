@@ -8,12 +8,6 @@
 ;; of the iconv functionality present in glibc.
 ;;
 ;; Documentation is available in HTML format.
-;;
-;; Version: 1.6
-;;
-;; Newer versions might be available at:
-;;
-;;    http://anonymous:@afc.no-ip.info:8000/svn/home/src/chicken-eggs/iconv
 
 (define-external (iconv_build_result (int len)) scheme-object
   (make-string len))
