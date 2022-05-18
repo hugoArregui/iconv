@@ -15,7 +15,12 @@
 (module iconv
   (iconv-open iconv)
 
-(import scheme chicken extras foreign)
+(cond-expand
+    (chicken-4
+     (import scheme chicken extras foreign))
+    (chicken-5
+     (import scheme (chicken base) (chicken foreign) (chicken gc)))
+    (else (error "Unsupported chicken version.")))
 
 (declare (foreign-declare "#include <iconv.h>\n#include <errno.h>\n"))
 
