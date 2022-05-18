@@ -1,0 +1,8 @@
+;;; iconv.egg -*- Hen -*-
+
+((synopsis "Character-set conversions")
+ (category parsing)
+ (license "Public Domain")
+ (author "Alejandro Forero Cuervo")
+ (test-dependencies test)
+ (components (extension iconv)))
