@@ -13,7 +13,7 @@
   (make-string len))
 
 (module iconv
-  (iconv-open iconv)
+  (make-iconv)
 
 (cond-expand
     (chicken-4
@@ -100,4 +100,9 @@
 EOF
 ))
 
+(define (make-iconv to from)
+  (let ((iconv-pointer (iconv-open to from)))
+    (when (not iconv-pointer)
+      (error "Could not open iconv."))
+    (lambda (input) (iconv iconv-pointer input))))
 )
